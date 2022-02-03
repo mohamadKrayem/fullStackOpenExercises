@@ -49,9 +49,11 @@ const App = () => {
   const handleVotes = () => {
     setVotes(votes + 1);
     handleUpdate(selected, copy[selected] + 1)
-    setIndex(copy.reduce((iMax, x, i, arr) => x > arr[iMax] ? i : iMax, 0))
-    setMax(copy[indexOfMaxValue])
-    setAne(anecdotes[indexOfMaxValue])
+    if (copy[selected] + 1 >= max) {
+      setIndex(copy.indexOf(copy[indexOfMaxValue]))
+      setMax(copy[selected] + 1)
+      setAne(anecdotes[selected])
+    }
   }
 
   return (
