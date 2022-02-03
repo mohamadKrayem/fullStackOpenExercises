@@ -17,9 +17,9 @@ const Part=(props)=>{
 const Content = ({props}) => {
   return (
     <div>
-      <Part part={props.part1} exercises={props.exercises1}/>
-      <Part part={props.part2} exercises={props.exercises2}/>
-      <Part part={props.part3} exercises={props.exercises3}/>
+      <Part part={props[0].name} exercises={props[0].exercises}/>
+      <Part part={props[1].name} exercises={props[1].exercises}/>
+      <Part part={props[2].name} exercises={props[2].exercises}/>
     </div>
   )
 }
@@ -32,28 +32,38 @@ const Total = (props) => {
 }
 
 const App = () => {
-  const course = 'Half Stack application development';
-  const props={
-    part1:'Fundamentals of React',
-    part2:'Using props to pass data',
-    part3:"State of a component",
-    exercises1:10,
-    exercises2:7,
-    exercises3:14
+  const course = {
+    name:'Half Stack application development',
+
+    parts: [
+      {
+        name: 'Fundamentals of React',
+        exercises: 10
+      },
+      {
+        name: 'Using props to pass data',
+        exercises: 7
+      },
+      {
+        name: 'State of a component',
+        exercises: 14
+      }
+    ]
   }
+
 
   return (
     <div>
-      <Header course={course} />
-      <Content props={props}/>
+      <Header course={course.name} />
+      <Content props={course.parts}/>
 
       <React.StrictMode>
 
 
         <Total
-          exercises1={props.exercises1}
-          exercises2={props.exercises2}
-          exercises3={props.exercises3}
+          exercises1={course.parts[0].exercises}
+          exercises2={course.parts[1].exercises}
+          exercises3={course.parts[2].exercises}
         />
       </React.StrictMode>
     </div>
