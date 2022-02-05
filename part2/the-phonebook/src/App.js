@@ -14,14 +14,13 @@ const App = () => {
   const [newNumber, setNewNumber] = useState("")
   const eachPerson = persons.map((person) => person.name)
   const [filterValue, setFilterValue] = useState("");
-  const [filtered, setFiltered] = useState(persons);
+  const [filtered, setFiltered] = useState([]);
   const [myArray, setMyArray] = useState(filtered)
 
   const add = (event) => {
     event.preventDefault();
     if (eachPerson.indexOf(newName) >= 0) return window.alert(`${newName} is already added to phonebook`)
     const array = persons.concat({ 'name': newName, 'number': newNumber });
-    setMyArray(array);
     setPersons(array);
     setNewName('');
     setNewNumber("")
@@ -39,7 +38,7 @@ const App = () => {
     setFilterValue(event.target.value);
     let result;
     if (event.target.value === "") result = persons
-    else result = persons.filter(person => person.name === event.target.value)
+    else result = persons.filter(person => person.name.toUpperCase() === event.target.value.toUpperCase())
     setFiltered(result)
     setMyArray(result)
   }
@@ -47,7 +46,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
-      <Filter value={filterValue} onChange={handleFilter} />
+      <Filter value={filterValue} array={myArray} onChange={handleFilter} />
 
       <h2>add a new</h2>
       <PersonForm
@@ -60,7 +59,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons array={myArray} />
+      <Persons persons={persons} />
 
     </div>
   )
