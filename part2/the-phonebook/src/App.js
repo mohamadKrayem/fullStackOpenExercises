@@ -1,15 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
+import axios from 'axios';
 
 const App = () => {
-  const [persons, setPersons] = useState([
-    {
-      name: 'Arto Hellas',
-      number: '040-1234567'
-    }
-  ])
+  const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('');
   const [newNumber, setNewNumber] = useState("")
   const eachPerson = persons.map((person) => person.name)
@@ -17,13 +13,19 @@ const App = () => {
   const [filtered, setFiltered] = useState([]);
   const [myArray, setMyArray] = useState(filtered)
 
+  useEffect(() => {
+    axios
+      .get('http://localhost:3003/persons')
+      .then(response => setPersons(response.data))
+  }, [])
+
   const add = (event) => {
     event.preventDefault();
     if (eachPerson.indexOf(newName) >= 0) return window.alert(`${newName} is already added to phonebook`)
     const array = persons.concat({ 'name': newName, 'number': newNumber });
     setPersons(array);
     setNewName('');
-    setNewNumber("")
+    setNewNumber("");
   }
 
   const handleNewName = (event) => {
@@ -37,7 +39,7 @@ const App = () => {
   const handleFilter = (event) => {
     setFilterValue(event.target.value);
     let result;
-    if (event.target.value === "") result = persons
+    if (event.target.value === "") result = []
     else result = persons.filter(person => person.name.toUpperCase() === event.target.value.toUpperCase())
     setFiltered(result)
     setMyArray(result)
