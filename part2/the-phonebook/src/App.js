@@ -2,6 +2,7 @@ import React, { useState, useEffect, StrictMode } from 'react';
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm';
 import Filter from './components/Filter';
+import Notification from './components/Notification';
 import axios from 'axios';
 
 const App = () => {
@@ -12,6 +13,13 @@ const App = () => {
   const [filterValue, setFilterValue] = useState("");
   const [filtered, setFiltered] = useState([]);
   const [myArray, setMyArray] = useState(filtered);
+  const [notification, setNotification] = useState('Notifications...');
+  const [styles, setStyles] = useState(
+    {
+      color: 'green',
+      border: '4px solid green'
+    }
+  );
   const baseUrl = 'http://localhost:3001/persons';
 
   useEffect(() => {
@@ -35,6 +43,22 @@ const App = () => {
               setPersons(persons.map(person => person.id !== response.data.id ? person : response.data))
               setNewName('');
               setNewNumber("");
+              setNotification(`${response.data.name}'s number was changed.`);
+            }
+          ).catch(
+            error => {
+              setNotification(`Information of ${toBeReplaced.name} has already been removed`)
+              setStyles({
+                color: 'red',
+                border: '4px solid red'
+              });
+              setTimeout(() => {
+                setNotification('Notifications...');
+                setStyles({
+                  color: 'green',
+                  border: '4px solid green'
+                })
+              }, 5000);
             }
           )
       }
@@ -44,6 +68,10 @@ const App = () => {
           setPersons(persons.concat(response.data));
           setNewName('');
           setNewNumber("");
+          setNotification(`Added ${response.data.name}`)
+          setTimeout(() => {
+            setNotification('Notifications...');
+          }, 5000);
         }
       )
     }
@@ -69,6 +97,7 @@ const App = () => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification style={styles} notification={notification} />
       <Filter value={filterValue} array={myArray} onChange={handleFilter} />
 
       <h2>add a new</h2>
