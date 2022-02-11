@@ -20,7 +20,7 @@ const App = () => {
       border: '4px solid green'
     }
   );
-  const baseUrl = 'http://localhost:3001/persons';
+  const baseUrl = '/api/persons';
 
   useEffect(() => {
     axios
